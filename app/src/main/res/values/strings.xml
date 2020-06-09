@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">FloatingWindow</string>
+    <string name="init">Init</string>
+    <string name="kill">Kill</string>
+    <string name="start">Start</string>
+    <string name="setting">Setting</string>
+    <string name="stop">Stop</string>
+    <string name="cap">Capture</string>
+    <string name="drag">Drag me</string>
+
+</resources>
