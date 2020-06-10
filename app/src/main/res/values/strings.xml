@@ -9,7 +9,7 @@
     <string name="stop">Stop</string>
     <string name="cap">Capture</string>
     <string name="drag">Drag me</string>
-    <string name="accessibility_service_description">TODO</string>
+    <string name="accessibility_service_description">enable accessibility for this project</string>
     <string name="accessibility_service_name">Intelligent Bytes Project</string>
-    <string name="accessibility_service_id">com.github.nestorm001.autoclicker/.service.AutoClickService</string>
+    <string name="accessibility_service_id">app.android.intbytes/.AutoClickService</string>
 </resources>

@@ -1,8 +1,13 @@
-<accessibility-service
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:accessibilityEventTypes="typeAllMask"
     android:accessibilityFeedbackType="feedbackGeneric"
     android:accessibilityFlags="flagDefault"
     android:canPerformGestures="true"
+    android:canRetrieveWindowContent="true"
     android:description="@string/accessibility_service_description"
-    android:packageNames="com.github.nestorm001.autoclicker"/>
+
+
+    android:notificationTimeout="100"
+    android:packageNames="app.android.intbytes"
+
+    android:settingsActivity="app.android.intbytes" />

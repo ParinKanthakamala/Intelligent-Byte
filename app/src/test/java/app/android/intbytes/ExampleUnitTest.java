@@ -1,4 +1,4 @@
-package com.phicomm.hu;
+package app.android.intbytes;
 
 import org.junit.Test;
 
