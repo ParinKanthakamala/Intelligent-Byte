@@ -2,21 +2,29 @@ package app.android.intbytes;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.GestureDescription;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Path;
+import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
 import java.util.List;
+
+import app.android.intbytes.program.Facebook;
 
 public class AutoClickService extends AccessibilityService {
 
@@ -28,8 +36,33 @@ public class AutoClickService extends AccessibilityService {
     private boolean release = true;
     private GestureDescription pushGestureDescription;
 
-    private int width = 0;
-    private int height = 0;
+    public int width = 0;
+    public int height = 0;
+
+    public void CreateDebugImage() {
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                PixelFormat.TRANSLUCENT);
+
+        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View myView = inflater.inflate(R.layout.widget, null);
+        myView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                return true;
+            }
+        });
+
+        // Add layout to window manager
+        wm.addView(myView, params);
+    }
 
     public void alert(String message) {
         Log.d("AutoClickService", message);
@@ -39,96 +72,19 @@ public class AutoClickService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        // NO-OP
-
+        if (!SharePoint.OnSession) {
+            return;
+        }
         if (this.metrics == null) {
             this.metrics = getApplicationContext().getResources().getDisplayMetrics();
         }
         if (width == 0) width = metrics.widthPixels;
         if (height == 0) height = metrics.heightPixels;
+        this.step = new Facebook(this).process(this.step);
 
-        //this.alert("onAccessibilityEvent");
-        try {
-            if (step == 0) {
-                this.OpenFacebook();
-                step = 1;
-            } else if (step == 1) {
-                // click menu
-                this.click(width - 100, 200);
-                step = 2;
-            } else if (step == 2) {
-                //click for my page
-                this.click(300, 300);
-                step = 3;
-            } else if (step == 3) {
-                // click drag
-                //
-                int duration = 500;
-                Point from = new Point(20, 500);
-                Point to = new Point(20, 0);
-                this.drag(from, to, duration);
+//        this.step++;
 
-                if (num_flag > this.firstPost) {
-                    num_flag = 0;
-                    step = 4;
-                }
-                this.num_flag += 500;
-            } else if (step == 4) {
-                // maxx
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Path path = new Path();
-                        path.moveTo(width / 2, height / 2);
-                        GestureDescription.Builder builder = new GestureDescription.Builder();
-                        pushGestureDescription = builder
-                                .addStroke(new GestureDescription.StrokeDescription(path, 10, 50000))
-                                .build();
-                        step = 5;
-                    }
-                }, 0);
-
-            } else if (step == 5) {
-                dispatchGesture(pushGestureDescription, null, null);
-                // maxx : for call past
-                step = 6;
-            } else if (step == 6) {
-                int height = metrics.heightPixels;
-                this.click(100, (height / 2) - 10);
-                step = 7;
-            } else if (step == 7) {
-                this.OpenGmail();
-                this.click(10, 580);
-                step = 8;
-            } else if (step == 8) {
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Path path = new Path();
-                        path.moveTo(width / 2, 580);
-                        GestureDescription.Builder builder = new GestureDescription.Builder();
-                        pushGestureDescription = builder
-                                .addStroke(new GestureDescription.StrokeDescription(path, 10, 50000))
-                                .build();
-                        step = 9;
-                    }
-                }, 0);
-            } else if (step == 9) {
-                dispatchGesture(pushGestureDescription, null, null);
-                step = 10;
-            } else if (step == 10) {
-                this.click(150, 520);
-                step = 11;
-            } else {
-                this.alert("Everything complete");
-                this.disableSelf();
-            }
-            this.alert("current step : " + step);
-
-        } catch (Exception ex) {
-            this.alert(ex.toString());
-        }
+        this.alert("step : " + this.step);
     }
 
     private void OpenFacebook() {
@@ -166,7 +122,7 @@ public class AutoClickService extends AccessibilityService {
     public void onServiceConnected() {
         super.onServiceConnected();
         //this.alert("onServiceConnected");
-        this.alert("start application");
+        //this.alert("start application");
 
     }
 
@@ -190,6 +146,19 @@ public class AutoClickService extends AccessibilityService {
                 .addStroke(new GestureDescription.StrokeDescription(path, 10, 10))
                 .build();
         dispatchGesture(gestureDescription, null, null);
+    }
+
+    public void double_click(int x, int y) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return;
+        for (int i = 0; i < 2; i++) {
+            Path path = new Path();
+            path.moveTo((float) x, (float) y);
+            GestureDescription.Builder builder = new GestureDescription.Builder();
+            GestureDescription gestureDescription = builder
+                    .addStroke(new GestureDescription.StrokeDescription(path, 10, 5))
+                    .build();
+            dispatchGesture(gestureDescription, null, null);
+        }
     }
 
 

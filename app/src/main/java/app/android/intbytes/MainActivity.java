@@ -47,7 +47,8 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
 
                 try {
-                    startService(new Intent(MainActivity.this, FloatingClickService.class));
+                    SharePoint.OnSession = true;
+                    //startService(new Intent(MainActivity.this, FloatingClickService.class));
                     startService(new Intent(MainActivity.this, AutoClickService.class));
                 } catch (Exception ex) {
                     Toast.makeText(MainActivity.this, ex.toString(), Toast.LENGTH_SHORT).show();
@@ -56,15 +57,7 @@ public class MainActivity extends Activity {
         });
 //
 //
-//        Button setting_btn = (Button) findViewById(R.id.setting_btn);
-//        setting_btn.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-//                startActivity(intent);
-//            }
-//        });
+
 
 
     }
@@ -93,7 +86,7 @@ public class MainActivity extends Activity {
             //startActivity(intent);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
-            askPermission();
+            //askPermission();
         }
     }
 

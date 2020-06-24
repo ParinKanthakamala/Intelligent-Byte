@@ -18,7 +18,7 @@ import java.util.List;
 public class SharePoint {
 
     public static Context context = null;
-
+    public static boolean OnSession = false;
     public static int dp2px(float dpValue) {
         float scale = Resources.getSystem().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
