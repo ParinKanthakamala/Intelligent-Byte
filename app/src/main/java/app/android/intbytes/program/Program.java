@@ -26,7 +26,7 @@ public abstract class Program {
     public int width = 0;
     public int height = 0;
 
-    public abstract int process(int step);
+    public abstract void process(int step);
 
     public void drag(Point from, Point to, int duration) {
         Path path = new Path();

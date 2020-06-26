@@ -1,4 +1,4 @@
-package com.example.android.autoclick;
+package app.android.intbytes.autoclick;
 
 import android.content.Context;
 import android.view.View;

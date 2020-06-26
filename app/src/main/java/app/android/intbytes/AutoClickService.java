@@ -80,9 +80,8 @@ public class AutoClickService extends AccessibilityService {
         }
         if (width == 0) width = metrics.widthPixels;
         if (height == 0) height = metrics.heightPixels;
-        this.step = new Facebook(this).process(this.step);
 
-//        this.step++;
+        Facebook.GetInstance(this).process(this.step++);
 
         this.alert("step : " + this.step);
     }

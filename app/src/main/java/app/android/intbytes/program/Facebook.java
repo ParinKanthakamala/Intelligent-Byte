@@ -18,36 +18,39 @@ public class Facebook extends Program {
         this.service.disableSelf();
     }
 
+    private static Facebook instance = null;
+
+    public static Facebook GetInstance(AutoClickService service) {
+        if (instance == null) {
+            instance = new Facebook(service);
+        }
+        return instance;
+    }
+
     @Override
-    public int process(int step) {
+    public void process(int step) {
         // NO-OP
 
         //this.alert("onAccessibilityEvent");
         try {
             if (step == 0) {
+                // open facebook
                 try {
                     this.service.getPackageManager().getPackageInfo("com.facebook.katana", 0);
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page"));
-//                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile"));
+                    //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile"));
 
                     this.service.startActivity(intent);
                 } catch (Exception ex) {
                     this.alert(ex.toString());
                 }
 
-            } else if (step == 1) {
-                // click menu
-                int x = width - 100;
-                int y = 350;
-                View view = LayoutInflater.from(this.service).inflate(R.layout.widget, null);
-
-                this.click(x, y);
-
             } else if (step == 2) {
-                //click for my page
-                this.end();
-                this.click(300, 300);
-            } else if (step == 3) {
+                // open my page
+                int x = 100;
+                int y = 350;
+                this.click(x, y);
+            } else if (step == 4 || step <= 9) {
                 // click drag
                 //
                 int duration = height / 3;
@@ -59,34 +62,38 @@ public class Facebook extends Program {
                     num_flag = 0;
                 }
                 this.num_flag += duration;
-            } else if (step == 4) {
-                // maxx
+            } else if (step == 10) {
+
+//                // maxx
+
+//                this.click(20, 400);
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         Path path = new Path();
-                        path.moveTo(width / 2, height / 2);
+                        path.moveTo(width / 2, 400);
                         GestureDescription.Builder builder = new GestureDescription.Builder();
                         pushGestureDescription = builder
                                 .addStroke(new GestureDescription.StrokeDescription(path, 10, 50000))
                                 .build();
+
                     }
                 }, 0);
 
-            } else if (step == 5) {
+//
+            } else if (step == 12) {
                 this.service.dispatchGesture(pushGestureDescription, null, null);
                 // maxx : for call past
-
-            } else if (step == 6) {
+            } else if (step == 14) {
                 int height = metrics.heightPixels;
-                this.click(100, (height / 2) - 10);
-
-            } else if (step == 7) {
+                this.click(width / 2, 400);
+            } else if (step == 16) {
                 this.OpenGmail();
+
+            } else if (step == 18) {
                 this.click(10, 580);
-
-            } else if (step == 8) {
-
+            } else if (step == 20) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -99,22 +106,20 @@ public class Facebook extends Program {
 
                     }
                 }, 0);
-            } else if (step == 9) {
+            } else if (step == 22) {
                 this.service.dispatchGesture(pushGestureDescription, null, null);
 
-            } else if (step == 10) {
+            } else if (step == 24) {
                 this.click(150, 520);
 
-            } else {
-                this.alert("Everything complete");
+            } else if (step > 30) {
                 this.service.disableSelf();
             }
-            this.alert("current step : " + step);
 
         } catch (Exception ex) {
             this.alert(ex.toString());
         }
-        return step += 1;
+
     }
 
 

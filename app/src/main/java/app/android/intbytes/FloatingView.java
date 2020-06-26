@@ -1,4 +1,4 @@
-package com.example.android.autoclick;
+package app.android.intbytes;
 
 import android.app.Service;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import com.example.android.autoclick.R;
+import app.android.intbytes.autoclick.AutoService;
 
 
 public class FloatingView extends Service implements View.OnClickListener {

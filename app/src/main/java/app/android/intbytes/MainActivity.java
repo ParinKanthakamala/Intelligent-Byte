@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import app.android.intbytes.services.FloatingClickService;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements View.OnClickListener {
     //定义浮动窗口布局
     LinearLayout mFloatLayout;
     //创建浮动窗口设置布局参数的对象
@@ -39,7 +39,10 @@ public class MainActivity extends Activity {
         //
         Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
         startActivity(intent);
-//        askPermission();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            askPermission();
+        }
         //
         Button start_btn = (Button) findViewById(R.id.start_btn);
         start_btn.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +62,6 @@ public class MainActivity extends Activity {
 //
 
 
-
     }
 
     private void uninstallApp(String packageName) {
@@ -77,23 +79,28 @@ public class MainActivity extends Activity {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        boolean hasPermission = checkAccess();
-        if (!hasPermission) {
-            //Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            //startActivity(intent);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
-            //askPermission();
-        }
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        boolean hasPermission = checkAccess();
+//        if (!hasPermission) {
+//            //Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+//            //startActivity(intent);
+//        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+//            //askPermission();
+//        }
+//    }
+
+
+    private static final int SYSTEM_ALERT_WINDOW_PERMISSION = 2084;
 
     private void askPermission() {
-        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"));
-        startActivityForResult(intent, PERMISSION_CODE);
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:" + getPackageName()));
+        startActivityForResult(intent, SYSTEM_ALERT_WINDOW_PERMISSION);
     }
+
 
     @Override
     public void onDestroy() {
@@ -122,4 +129,19 @@ public class MainActivity extends Activity {
     	
     	  //mState = ApplicationsState.getInstance(this.getApplication());
     }*/
+
+
+    @Override
+    public void onClick(View v) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            startService(new Intent(MainActivity.this, FloatingView.class));
+            finish();
+        } else if (Settings.canDrawOverlays(this)) {
+            startService(new Intent(MainActivity.this, FloatingView.class));
+            finish();
+        } else {
+            askPermission();
+            Toast.makeText(this, "You need System Alert Window Permission to do this", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

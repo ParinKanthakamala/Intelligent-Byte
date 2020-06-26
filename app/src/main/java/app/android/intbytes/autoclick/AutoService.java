@@ -1,4 +1,4 @@
-package com.example.android.autoclick;
+package app.android.intbytes.autoclick;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.GestureDescription;

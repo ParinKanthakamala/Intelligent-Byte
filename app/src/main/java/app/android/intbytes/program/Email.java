@@ -17,7 +17,7 @@ import app.android.intbytes.AutoClickService;
 public class Email extends Program {
 
     @Override
-    public int process(int step) {
+    public void process(int step) {
         // NO-OP
         switch (step) {
             case 1: {
@@ -155,7 +155,7 @@ public class Email extends Program {
             }
             break;
         }
-        return step++;
+
     }
 
     public Email(AutoClickService service) {
