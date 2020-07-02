@@ -35,22 +35,20 @@ public class Facebook extends Program {
         try {
             if (step == 0) {
                 // open facebook
-                try {
+
                     this.service.getPackageManager().getPackageInfo("com.facebook.katana", 0);
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page"));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile"));
-
                     this.service.startActivity(intent);
-                } catch (Exception ex) {
-                    this.alert(ex.toString());
-                }
+
 
             } else if (step == 2) {
                 // open my page
                 int x = 100;
                 int y = 350;
                 this.click(x, y);
-            } else if (step == 4 || step <= 9) {
+            } else if (step >= 4 && step <= 9) {
                 // click drag
                 //
                 int duration = height / 3;

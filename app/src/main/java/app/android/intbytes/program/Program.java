@@ -88,6 +88,7 @@ public abstract class Program {
 
         final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
         intent.setType("text/plain");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PackageManager pm = this.service.getPackageManager();
         List<ResolveInfo> matches = pm.queryIntentActivities(intent, 0);
         ResolveInfo best = null;
