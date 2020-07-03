@@ -39,6 +39,7 @@ public abstract class Program {
         service.dispatchGesture(gestureDescription, null, null);
     }
 
+    // as click at position
     public void click(int x, int y) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return;
         Path path = new Path();
@@ -51,39 +52,32 @@ public abstract class Program {
     }
 
 
-    public void push(int x, int y, int duration) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return;
-        int pre_click = 10;
-        Path path = new Path();
-        path.moveTo((float) x, (float) y);
-        GestureDescription.Builder builder = new GestureDescription.Builder();
-        GestureDescription gestureDescription = builder
-                .addStroke(new GestureDescription.StrokeDescription(path, pre_click, pre_click + duration))
-                .build();
-        service.dispatchGesture(gestureDescription, null, null);
-    }
-
-    public void release() {
-        this.alert("Release");
-    }
+//    public void push(int x, int y, int duration) {
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return;
+//        int pre_click = 10;
+//        Path path = new Path();
+//        path.moveTo((float) x, (float) y);
+//        GestureDescription.Builder builder = new GestureDescription.Builder();
+//        GestureDescription gestureDescription = builder
+//                .addStroke(new GestureDescription.StrokeDescription(path, pre_click, pre_click + duration))
+//                .build();
+//        service.dispatchGesture(gestureDescription, null, null);
+//    }
 
 
-    public void alert(String message) {
-
-    }
-
+    // open facebook application
     public void OpenFacebook() {
         try {
             this.service.getPackageManager().getPackageInfo("com.facebook.katana", 0);
-//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page"));
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile"));
-
             this.service.startActivity(intent);
         } catch (Exception ex) {
-            this.alert(ex.toString());
+
         }
     }
 
+
+    // open gmail application
     public void OpenGmail() {
 
         final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
@@ -100,8 +94,9 @@ public abstract class Program {
         this.service.startActivity(intent);
     }
 
+    // initialize program and set width and height to store screen resolution
     public Program(AutoClickService service) {
-        this.service = service;
+        this.service = service;// set input service to current variable service
         if (this.metrics == null) {
             this.metrics = this.service.getApplicationContext().getResources().getDisplayMetrics();
         }

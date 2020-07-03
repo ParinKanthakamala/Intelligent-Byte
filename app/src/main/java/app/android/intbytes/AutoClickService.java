@@ -1,34 +1,18 @@
 package app.android.intbytes;
 
 import android.accessibilityservice.AccessibilityService;
-import android.accessibilityservice.GestureDescription;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.Path;
-import android.graphics.PixelFormat;
-import android.graphics.Point;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
-import java.util.List;
-
 import app.android.intbytes.program.Facebook;
 
+// this class for main accessibility service
 public class AutoClickService extends AccessibilityService {
 
-    private int step = 0;
+    private int step = 0; // step
     private DisplayMetrics metrics = null;
     public int width = 0;
     public int height = 0;
@@ -40,18 +24,14 @@ public class AutoClickService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        if (!SharePoint.OnSession) {
-            return;
-        }
+
         if (this.metrics == null) {
-            this.metrics = getApplicationContext().getResources().getDisplayMetrics();
+            this.metrics = getApplicationContext().getResources().getDisplayMetrics();// get Display metrics
         }
-        if (width == 0) width = metrics.widthPixels;
-        if (height == 0) height = metrics.heightPixels;
-
-        Facebook.GetInstance(this).process(this.step++);
-
-        this.alert("step : " + this.step);
+        if (width == 0) width = metrics.widthPixels;// get resolution with
+        if (height == 0) height = metrics.heightPixels;// get resolution height
+        Facebook.GetInstance(this).process(this.step++);// manage for facebook process and send step
+        this.alert("step : " + this.step);// show step message
     }
 
     @Override
@@ -66,13 +46,13 @@ public class AutoClickService extends AccessibilityService {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        this.alert("onUnBind");
+        this.alert("onUnBind"); // show message when close service
         return super.onUnbind(intent);
     }
 
     @Override
     public void onDestroy() {
-        this.alert("good bye");
+        this.alert("good bye");// show message when service Destroy complete
         super.onDestroy();
     }
 }
