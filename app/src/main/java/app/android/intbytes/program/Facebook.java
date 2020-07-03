@@ -6,11 +6,7 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-
 import app.android.intbytes.AutoClickService;
-import app.android.intbytes.R;
 
 public class Facebook extends Program {
 
@@ -29,9 +25,7 @@ public class Facebook extends Program {
 
     @Override
     public void process(int step) {
-        // NO-OP
 
-        //this.alert("onAccessibilityEvent");
         try {
             if (step == 0) {
                 // open facebook
@@ -63,8 +57,6 @@ public class Facebook extends Program {
             } else if (step == 10) {
 
 //                // maxx
-
-//                this.click(20, 400);
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
